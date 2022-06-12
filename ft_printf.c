@@ -6,7 +6,7 @@
 /*   By: atopalli <atopalli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 13:24:25 by atopalli          #+#    #+#             */
-/*   Updated: 2022/06/11 23:23:52 by atopalli         ###   ########.fr       */
+/*   Updated: 2022/06/12 09:37:16 by atopalli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,11 @@ int	ft_printf(const char *format, ...)
 
 int	main(void)
 {
-	//int	i;
+	int	i;
 
-	ft_printf(" %d\n", ft_printf("hello %i", -21));
-	printf(" %d\n", printf("hello %i", -21));
+	i = -21321;
+	ft_printf(" %d\n", ft_printf("hello %i", i));
+	printf(" %d\n", printf("hello %i", i));
 }
 
 char	*ft_convert(long int num, char wbase, int *counter)
