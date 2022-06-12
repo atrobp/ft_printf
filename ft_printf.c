@@ -6,15 +6,15 @@
 /*   By: atopalli <atopalli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 13:24:25 by atopalli          #+#    #+#             */
-/*   Updated: 2022/06/11 20:17:56 by atopalli         ###   ########.fr       */
+/*   Updated: 2022/06/11 23:23:52 by atopalli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_h.h"
 
-static void	ft_putchar(char c, int *counter);
+static char	*ft_convert(long int num, char wbase, int *counter);
 static void	ft_putstr(const char *str, int *counter);
-static char	*ft_convert(long unsigned int num, char wbase);
+static void	ft_putchar(char c, int *counter);
 
 int	ft_printf(const char *format, ...)
 {
@@ -25,18 +25,17 @@ int	ft_printf(const char *format, ...)
 	counter = 0;
 	while (*format)
 	{
-		if (*format == '%' && *format + 1 == 's' && format++)
-			ft_putstr(va_arg(ap, char *), &counter);
-		else if (*format == '%' && *format + 1 == 'c' && format++)
-			ft_putchar(va_arg(ap, int), &counter);
-		else if (*format == '%' && *format + 1 == '%' && format++)
-			ft_putstr("%", &counter);
-		else
+		if (*format == '%' && format++)
 		{
-			if (*format == '%' && *format + 1 == 'p' && format++)
-				ft_putstr("0x", &counter);
-			ft_putstr(ft_convert(va_arg(ap, long int),
-					*format++), &counter);
+			if (*format == 'c' && format++)
+				ft_putchar(va_arg(ap, int), &counter);
+			else if (*format == 's' && format++)
+				ft_putstr(va_arg(ap, char *), &counter);
+			else if (*format == '%' && format++)
+				ft_putstr("%", &counter);
+			else
+				ft_putstr(ft_convert(va_arg(ap, long int),
+						*format++, &counter), &counter);
 		}
 		else
 			ft_putchar(*format++, &counter);
@@ -44,7 +43,15 @@ int	ft_printf(const char *format, ...)
 	return (counter);
 }
 
-char	*ft_convert(long unsigned int num, char wbase)
+int	main(void)
+{
+	//int	i;
+
+	ft_printf(" %d\n", ft_printf("hello %i", -21));
+	printf(" %d\n", printf("hello %i", -21));
+}
+
+char	*ft_convert(long int num, char wbase, int *counter)
 {
 	static char	reprensation[16] = "0123456789abcdef";
 	static char	buffer[50];
@@ -53,12 +60,9 @@ char	*ft_convert(long unsigned int num, char wbase)
 
 	str = &buffer[49];
 	*str = '\0';
+	base = 10;
 	if (wbase == 'x' || wbase == 'X' || wbase == 'p')
 		base = 16;
-	else if (wbase == 'd' || wbase == 'i')
-		base = 10;
-	else
-		base = 8;
 	while (num)
 	{
 		if (wbase == 'X' && num % base > 9)
@@ -67,6 +71,8 @@ char	*ft_convert(long unsigned int num, char wbase)
 			*--str = reprensation[num % base];
 		num /= base;
 	}
+	if (wbase == 'p')
+		ft_putstr("0x", counter);
 	return (str);
 }
 
