@@ -12,13 +12,13 @@
 
 NAME = libftprintf.a
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -I -nostartfiles
+CFLAGS = -Wall -Wextra -Werror
 RM = rm -f
 
 MANDATORY = ft_printf.c
 MANDATORY_OBJ = $(MANDATORY:.c=.o)
 
-$(NAME): $(MANOBJS)
+$(NAME): $(MANDATORY_OBJ)
 	ar rcs $(NAME) $(MANDATORY_OBJ)
 all: $(NAME)
 clean:

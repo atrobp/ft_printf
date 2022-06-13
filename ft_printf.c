@@ -1,63 +1,64 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: atopalli <atopalli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/11 13:24:25 by atopalli          #+#    #+#             */
-/*   Updated: 2022/06/12 09:37:16 by atopalli         ###   ########.fr       */
+/*   Created: 2022/06/12 15:24:02 by atopalli          #+#    #+#             */
+/*   Updated: 2022/06/12 15:24:02 by atopalli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_h.h"
+#include <stdio.h>
 
-static char	*ft_convert(long int num, char wbase, int *counter);
-static void	ft_putstr(const char *str, int *counter);
-static void	ft_putchar(char c, int *counter);
+static char	*ft_convert(long int num, char wbase);
+static void	ft_putstr(const char *str);
+static void	ft_putchar(char c);
+
+int	g_final = 0;
 
 int	ft_printf(const char *format, ...)
 {
 	va_list	ap;
-	int		counter;
 
 	va_start(ap, format);
-	counter = 0;
 	while (*format)
 	{
 		if (*format == '%' && format++)
 		{
-			if (*format == 'c' && format++)
-				ft_putchar(va_arg(ap, int), &counter);
-			else if (*format == 's' && format++)
-				ft_putstr(va_arg(ap, char *), &counter);
-			else if (*format == '%' && format++)
-				ft_putstr("%", &counter);
+			if (*format == 's')
+				ft_putstr(va_arg(ap, char *));
+			else if (*format == 'c')
+				ft_putchar(va_arg(ap, int));
+			else if (*format == '%')
+				ft_putstr("%");
 			else
-				ft_putstr(ft_convert(va_arg(ap, long int),
-						*format++, &counter), &counter);
+				ft_putstr(ft_convert(va_arg(ap, long int), *format));
+			format++;
 		}
 		else
-			ft_putchar(*format++, &counter);
+			ft_putchar(*format++);
 	}
-	return (counter);
+	return (g_final);
 }
 
 int	main(void)
 {
 	int	i;
 
-	i = -21321;
-	ft_printf(" %d\n", ft_printf("hello %i", i));
-	printf(" %d\n", printf("hello %i", i));
+	i = 1;
+	ft_printf("hell world %p\n", &i);
+	printf("hell world %p\n", &i);
 }
 
-char	*ft_convert(long int num, char wbase, int *counter)
+static char	*ft_convert(long int num, char wbase)
 {
 	static char	reprensation[16] = "0123456789abcdef";
+	int			base;
 	static char	buffer[50];
 	char		*str;
-	int			base;
 
 	str = &buffer[49];
 	*str = '\0';
@@ -69,22 +70,20 @@ char	*ft_convert(long int num, char wbase, int *counter)
 		if (wbase == 'X' && num % base > 9)
 			*--str = reprensation[num % base] - 32;
 		else
-			*--str = reprensation[num % base];
+			*-- str = reprensation[num % base];
 		num /= base;
 	}
-	if (wbase == 'p')
-		ft_putstr("0x", counter);
 	return (str);
 }
 
-static void	ft_putstr(const char *str, int *counter)
+static void	ft_putstr(const char *str)
 {
 	while (*str)
-		ft_putchar(*str++, counter);
+		ft_putchar(*str++);
 }
 
-static void	ft_putchar(char c, int *counter)
+static void	ft_putchar(char c)
 {
 	write(1, &c, 1);
-	*counter += 1;
+	g_final += 1;
 }
