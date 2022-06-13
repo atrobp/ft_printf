@@ -10,10 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_h.h"
+#include "ft_printf.h"
 #include <stdio.h>
 
-static char	*ft_convert(long int num, char wbase);
+static char	*ft_convert(long unsigned int num, char wbase);
 static void	ft_putstr(const char *str);
 static void	ft_putchar(char c);
 
@@ -44,16 +44,7 @@ int	ft_printf(const char *format, ...)
 	return (g_final);
 }
 
-int	main(void)
-{
-	int	i;
-
-	i = 1;
-	ft_printf("hell world %p\n", &i);
-	printf("hell world %p\n", &i);
-}
-
-static char	*ft_convert(long int num, char wbase)
+static char	*ft_convert(long unsigned int num, char wbase)
 {
 	static char	reprensation[16] = "0123456789abcdef";
 	int			base;
@@ -64,7 +55,18 @@ static char	*ft_convert(long int num, char wbase)
 	*str = '\0';
 	base = 10;
 	if (wbase == 'x' || wbase == 'X' || wbase == 'p')
+	{
 		base = 16;
+		if (wbase == 'p')
+			ft_putstr("0x");
+	}
+	if (num < 0 && wbase != 'p')
+	{
+		num = -num;
+		ft_putstr("-");
+	}
+	if (num == 0)
+		return ("0");
 	while (num)
 	{
 		if (wbase == 'X' && num % base > 9)
@@ -78,6 +80,8 @@ static char	*ft_convert(long int num, char wbase)
 
 static void	ft_putstr(const char *str)
 {
+	if (str == NULL)
+		str = "(null)";
 	while (*str)
 		ft_putchar(*str++);
 }

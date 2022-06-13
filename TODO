@@ -1,6 +1,6 @@
 TODO:
-Gerer les negatifs
 BONUS?
 
 FIXME:
-
+fix les ints (%d, %p, %i) qui == 0
+plus de 25 lignes dans la fonction *ft_convert
