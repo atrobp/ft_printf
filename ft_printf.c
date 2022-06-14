@@ -35,13 +35,22 @@ int	ft_printf(const char *format, ...)
 			else if (*format == '%')
 				ft_putstr("%");
 			else
-				ft_putstr(ft_convert(va_arg(ap, long int), *format));
+				ft_putstr(ft_convert(va_arg(ap, long unsigned int), *format));
 			format++;
 		}
 		else
 			ft_putchar(*format++);
 	}
 	return (g_final);
+}
+
+int	main(void)
+{
+	int	a;
+
+	a = -1;
+	ft_printf("%u\n", 1);
+	printf("%u\n", 1);
 }
 
 static char	*ft_convert(long unsigned int num, char wbase)
@@ -55,14 +64,12 @@ static char	*ft_convert(long unsigned int num, char wbase)
 	*str = '\0';
 	base = 10;
 	if (wbase == 'x' || wbase == 'X' || wbase == 'p')
-	{
 		base = 16;
-		if (wbase == 'p')
-			ft_putstr("0x");
-	}
-	if (num < 0 && wbase != 'p')
+	if (wbase == 'p')
+		ft_putstr("0x");
+	if ((int)num < 0 && wbase != 'p')
 	{
-		num = -num;
+		num = (int)-num;
 		ft_putstr("-");
 	}
 	if (num == 0)
