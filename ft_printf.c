@@ -1,23 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: atopalli <atopalli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/12 15:24:02 by atopalli          #+#    #+#             */
-/*   Updated: 2022/06/12 15:24:02 by atopalli         ###   ########.fr       */
+/*   Created: 2022/06/16 22:10:12 by atopalli          #+#    #+#             */
+/*   Updated: 2022/06/16 22:42:37 by atopalli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include <stdio.h>
 
-static char	*ft_convert(long unsigned int num, char wbase);
+static char	*ft_convert(long long num, char wbase);
+static void	negativecheck(long long *num);
 static void	ft_putstr(const char *str);
 static void	ft_putchar(char c);
 
-int	g_final = 0;
+int		g_final = 0;
+char	g_reprensation[16] = "0123456789abcdef";
+char	g_buffer[50];
 
 int	ft_printf(const char *format, ...)
 {
@@ -35,7 +37,7 @@ int	ft_printf(const char *format, ...)
 			else if (*format == '%')
 				ft_putstr("%");
 			else
-				ft_putstr(ft_convert(va_arg(ap, long unsigned int), *format));
+				ft_putstr(ft_convert(va_arg(ap, long long), *format));
 			format++;
 		}
 		else
@@ -44,45 +46,37 @@ int	ft_printf(const char *format, ...)
 	return (g_final);
 }
 
-int	main(void)
+static char	*ft_convert(long long num, char wbase)
 {
-	int	a;
+	int		base;
+	char	*str;
 
-	a = -1;
-	ft_printf("%u\n", 1);
-	printf("%u\n", 1);
-}
-
-static char	*ft_convert(long unsigned int num, char wbase)
-{
-	static char	reprensation[16] = "0123456789abcdef";
-	int			base;
-	static char	buffer[50];
-	char		*str;
-
-	str = &buffer[49];
+	str = &g_buffer[49];
 	*str = '\0';
 	base = 10;
 	if (wbase == 'x' || wbase == 'X' || wbase == 'p')
 		base = 16;
 	if (wbase == 'p')
 		ft_putstr("0x");
-	if ((int)num < 0 && wbase != 'p')
-	{
-		num = (int)-num;
-		ft_putstr("-");
-	}
 	if (num == 0)
 		return ("0");
+	if (num < 0)
+		negativecheck(&num);
 	while (num)
 	{
 		if (wbase == 'X' && num % base > 9)
-			*--str = reprensation[num % base] - 32;
+			*--str = g_reprensation[num % base] - 32;
 		else
-			*-- str = reprensation[num % base];
+			*-- str = g_reprensation[num % base];
 		num /= base;
 	}
 	return (str);
+}
+
+static void	negativecheck(long long *num)
+{
+	*num = -*num;
+	ft_putstr("-");
 }
 
 static void	ft_putstr(const char *str)

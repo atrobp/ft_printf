@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: atopalli <atopalli@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/06/11 19:14:49 by atopalli          #+#    #+#              #
-#    Updated: 2022/06/11 19:14:49 by atopalli         ###   ########.fr        #
+#    Created: 2022/06/16 22:42:07 by atopalli          #+#    #+#              #
+#    Updated: 2022/06/16 22:42:08 by atopalli         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,4 +25,4 @@ clean:
 	$(RM) $(MANDATORY_OBJ)
 fclean: clean
 	$(RM) *.out *.a
-re: fclean all
+re: flcean all
